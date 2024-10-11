@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>URL Shortener</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column; /* Stack elements vertically */
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+    .container {
+      text-align: center;
+      background-color: white;
+      padding: 30px;
+      box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px; /* Space between container and table */
+    }
+    input[type="url"] {
+      padding: 10px;
+      width: 80%;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    table {
+      width: 80%;
+      margin: 20px auto; /* Center the table */
+      border-collapse: collapse; /* Combine borders */
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd; /* Add a bottom border */
+    }
+    th {
+      background-color: #f2f2f2; /* Light background for headers */
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>URL Shortener</h2>
+    <% if (id) { %>
+        <p>URL Generated: http://localhost:8001/url/<%= id %></p>
+    <% } %>
+    <form id="url-form" method="post" action="/url">
+      <input 
+        type="url" 
+        name="url" 
+        placeholder="https://example.com" 
+        required
+      />
+      <button type="submit">Generate Short URL</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <div>
+    <% if (urls && urls.length > 0) { %> <!-- Check if urls exist and has elements -->
+     <table>
+        <thead>
+            <tr>
+                <th>S.No</th>
+                <th>Short ID</th>
+                <th>Redirect</th>
+                <th>Clicks</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% urls.forEach((url, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= url.shortId %></td>
+                    <td><a href="<%= url.redirectURL %>" target="_blank"><%= url.redirectURL %></a></td>
+                    <td><%= url.visitHistory.length %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+     </table>
+    <% } else { %>
+      <p>No URLs found.</p>
+    <% } %>
+  </div>
+</body>
+</html>
