@@ -18,21 +18,26 @@ async function handelUserSignup(req, res) {
 async function handelUserLogin(req, res) {
     const { email, password } = req.body;
 
-    const user = await User.findOne({ email , password });
+    // Find the user by email and password
+    const user = await User.findOne({ email, password });
 
-    if(!user) return res.render('login',{
-        error:'Invalid User name or password'
-    })
+    // Handle invalid login
+    if (!user) {
+        return res.render('login', {
+            error: 'Invalid username or password',
+        });
+    }
 
-    // const sessionId = uuidv4();
-    // setUser(sessionId,user);
-    const token = setUser(user);
+    // Create a token with essential fields (id, role, etc.)
+    const token = setUser({ id: user._id, role: user.role });
 
-    // res.cookie("uid",sessionId);
+    // Set token in the 'token' cookie
+    res.cookie("token", token, { httpOnly: true, secure: false });
 
-    res.cookie("uid",token);
+    // Redirect to the homepage after successful login
     return res.redirect("/");
 }
+
 
 
 module.exports = { 

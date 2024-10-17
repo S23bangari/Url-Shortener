@@ -6,7 +6,8 @@ function setUser(user) {
     const payload = {
         id: user._id,    // MongoDB's ObjectId
         name: user.name,
-        email: user.email
+        email: user.email,
+        role: user.role
     };
 
     // Sign the token using the secret key
